@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -120,39 +121,67 @@ class ActionsPane extends ConsumerWidget {
                       print(e);
                     }
                   },
-                  onLongPress: () {
-                    showDialog(
+                  onLongPress: () async {
+                    final bid = await showDialog<String>(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text('Enter blockId'),
-                          content: SizedBox(
-                            width: 0.3.sw,
-                            child: TextField(),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('OK'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('Cancel'),
-                            ),
-                          ],
-                        );
+                        return EnterBlockIdDialog();
                       },
                     );
+                    if (bid != null) {
+                      final notifier = ref.read(logProvider.notifier);
+                      notifier.addItem(LogItem(text: "Sending Request"));
+                      try {
+                        final response = await http.get(
+                          Uri.parse(
+                            'http://52.55.214.106:8080/getBlock?blockId=$bid',
+                          ),
+                        );
+                        notifier.addItem(LogItem(text: response.body));
+                      } catch (e) {
+                        print(e);
+                      }
+                    }
                   },
                 ),
               ],
             ),
           ),
         )
+      ],
+    );
+  }
+}
+
+class EnterBlockIdDialog extends HookWidget {
+  const EnterBlockIdDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = useTextEditingController();
+    return AlertDialog(
+      title: Text('Enter blockId'),
+      content: SizedBox(
+        width: 0.3.sw,
+        child: TextField(
+          controller: controller,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, controller.text);
+          },
+          child: Text('OK'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Cancel'),
+        ),
       ],
     );
   }
