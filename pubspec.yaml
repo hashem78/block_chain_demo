@@ -1,0 +1,28 @@
+name: block_chain_demo
+description: A demo for gp-project
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_hooks: ^0.18.2+1
+  flutter_riverpod: ^1.0.3
+  flutter_screenutil: ^5.3.1
+  hooks_riverpod: ^1.0.3
+  http: ^0.13.4
+  responsive_framework: ^0.1.7
+  window_manager: ^0.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
