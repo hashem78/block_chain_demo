@@ -39,7 +39,7 @@ class ActionsPane extends ConsumerWidget {
                     try {
                       final response = await http.get(
                         Uri.parse(
-                          'http://52.55.214.106:8080/getBlock?blockId=testBlock',
+                          'http://44.204.70.177:8080/getBlock?blockId=testBlock',
                         ),
                       );
                       notifier.addItem(LogItem(text: response.body));
@@ -58,7 +58,7 @@ class ActionsPane extends ConsumerWidget {
                       try {
                         final response = await http.get(
                           Uri.parse(
-                            'http://52.55.214.106:8080/getBlock?blockId=$bid',
+                            'http://44.204.70.177:8080/getBlock?blockId=$bid',
                           ),
                         );
                         notifier.addItem(LogItem(text: response.body));
